@@ -1,7 +1,7 @@
 pipeline {
   agent {
     docker {
-      image 'build-container'
+      image 'ehime/build-container:latest'
     }
   }
   environment {
