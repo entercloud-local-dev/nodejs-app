@@ -17,8 +17,6 @@ pipeline {
             usernamePassword(credentialsId: '2facaea2-613b-4f34-9fb7-1dc2daf25c45', passwordVariable: 'REPO_PASS', usernameVariable: 'REPO_USER'),
           ]) {
             sh 'packer build -var aws_access_key=${AWS_KEY} -var aws_secret_key=${AWS_SECRET} packer/packer.json'
-            sh 'git config user.name "ehime"'
-            sh 'git config user.email dodomeki@gmail.com'
             sh '[ -d "nodejs-app-terraform" ] && rm -rf nodejs-app-terraform'
             sh 'git clone https://github.com/ehime/nodejs-app-terraform.git'
             sh '''
@@ -26,7 +24,7 @@ pipeline {
                terraform init
                terraform apply -auto-approve -var access_key=${AWS_KEY} -var secret_key=${AWS_SECRET}
                git add terraform.tfstate
-               git commit -m "terraform state update from Jenkins"
+               git commit -c user.name="ehime" -c user.email="dodomeki@gmail.com" -m "terraform state update from Jenkins"
                git push https://${REPO_USER}:${REPO_PASS}@github.com/ehime/nodejs-app-terraform.git master
             '''
         }
