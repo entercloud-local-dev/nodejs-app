@@ -1,2 +1,2 @@
-# node-app
+# nodejs-app
 Node Application Test
