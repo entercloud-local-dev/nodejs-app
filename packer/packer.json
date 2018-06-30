@@ -22,7 +22,7 @@
     }, {
       "type": "ansible-local",
       "playbook_file": "packer/packer.yml"
-    }, {
+    },   {
       "type": "shell",
       "inline": [
         "mkdir /tmp/tests"
@@ -45,7 +45,7 @@
     "source_ami_filter": {
       "filters": {
         "virtualization-type": "hvm",
-        "name": "ubuntu/images/*ubuntu-xenial-16.04-amd64-server-*",
+        "name": "ubuntu/images/*ubuntu-trusty-14.04-amd64-server-*",
         "root-device-type": "ebs"
       },
       "owners": ["099720109477"],

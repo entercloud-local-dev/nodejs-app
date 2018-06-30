@@ -3,6 +3,7 @@
 
   tasks:
 
+    # Install the Ruby and Gemspec pieces
     - name: Latest version of Ruby is installed
       become: true
       apt: pkg={{ item }} state=latest
@@ -10,22 +11,14 @@
         - "ruby2.0"
         - "ruby2.0-dev"
 
-    - name: Symlink exists for Ruby 2.0
+    - name: Symlink exists for Ruby and Gemsspec
       become: true
-      file:
-        src: "/usr/bin/ruby2.0"
-        dest: "/usr/local/bin/ruby"
-        state: link
-        force: yes
+      file: src=/usr/bin/{{ item }}2.0 dest=/usr/local/bin/{{ item }} state=link
+      with_items:
+        - "gem"
+        - "ruby"
 
-    - name: Symlink exists for Ruby Gems 2.0
-      become: true
-      file:
-        src: "/usr/bin/gem2.0"
-        dest: "/usr/local/bin/gem"
-        state: link
-        force: yes
-
+    # Install the NodeJS pieces
     - name: Install the gpg key for nodejs LTS
       become: true
       apt_key:
