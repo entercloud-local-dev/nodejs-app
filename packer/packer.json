@@ -4,8 +4,7 @@
     "aws_secret_key": ""
   },
 
-  "provisioners": [
-    {
+  "provisioners": [{
         "type": "shell",
         "execute_command": "echo 'ubuntu' | {{ .Vars }} sudo -E -S sh '{{ .Path }}'",
         "inline": [
@@ -16,15 +15,25 @@
             "mkdir /home/ubuntu/nodejs-app",
             "chown ubuntu:ubuntu /home/ubuntu/nodejs-app"
         ]
-    },
-    {
+    }, {
       "type": "file",
       "source": ".",
       "destination": "/home/ubuntu/nodejs-app/"
-    },
-    {
+    }, {
       "type": "ansible-local",
       "playbook_file": "packer/packer.yml"
+    }, {
+      "type": "shell",
+      "inline": [
+        "mkdir /tmp/tests"
+      ]
+    }, {
+        "type": "file",
+        "source": "packer/serverspec_tests",
+        "destination": "/tmp/tests"
+    }, {
+        "type": "shell",
+        "script": "packer/scripts/serverspec.sh"
     }
   ],
 
@@ -36,7 +45,7 @@
     "source_ami_filter": {
       "filters": {
         "virtualization-type": "hvm",
-        "name": "ubuntu/images/*ubuntu-trusty-14.04-amd64-server-*",
+        "name": "ubuntu/images/*ubuntu-xenial-16.04-amd64-server-*",
         "root-device-type": "ebs"
       },
       "owners": ["099720109477"],

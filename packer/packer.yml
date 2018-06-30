@@ -3,6 +3,23 @@
 
   tasks:
 
+    - name: Latest version of Ruby is installed
+      become: true
+      apt: pkg={{ item }} state=latest
+      with_items:
+        - "ruby2.0"
+        - "ruby2.0-dev"
+
+    - name: Symlink exists for Ruby 2.0
+      file:
+        src: /usr/bin/ruby2.0
+        dest: /usr/local/bin/ruby
+        state: link
+
+    - name: Symlink exists for Ruby Gems 2.0
+      become: true
+      file: src=/usr/bin/gem2.0 dest=/usr/local/bin/gem state=link
+
     - name: Install the gpg key for nodejs LTS
       become: true
       apt_key:
@@ -22,7 +39,7 @@
       apt:
         name: nodejs
         state: present
-    
+
     - name: Install PM2
       become: true
       command: npm install -g pm2
@@ -38,4 +55,3 @@
 
     - name: PM2 startup configuration (pm2 save)
       command: pm2 save
-
