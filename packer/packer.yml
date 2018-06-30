@@ -11,14 +11,20 @@
         - "ruby2.0-dev"
 
     - name: Symlink exists for Ruby 2.0
+      become: true
       file:
-        src: /usr/bin/ruby2.0
-        dest: /usr/local/bin/ruby
+        src: "/usr/bin/ruby2.0"
+        dest: "/usr/local/bin/ruby"
         state: link
+        force: yes
 
     - name: Symlink exists for Ruby Gems 2.0
       become: true
-      file: src=/usr/bin/gem2.0 dest=/usr/local/bin/gem state=link
+      file:
+        src: "/usr/bin/gem2.0"
+        dest: "/usr/local/bin/gem"
+        state: link
+        force: yes
 
     - name: Install the gpg key for nodejs LTS
       become: true
