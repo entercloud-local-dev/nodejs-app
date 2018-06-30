@@ -60,5 +60,7 @@
       "volume_type": "gp2",
       "delete_on_termination": true
     }]
-  }]
+  }],
+
+  "post-processors": ["vagrant"]
 }
