@@ -20,7 +20,11 @@ pipeline {
           }
         }
       }
-
+      stage('Application Unit Tests') {
+        steps {
+          sh 'echo -e "You should insert your steps for REAL testing here-ish..'
+        }
+      }
       stage('Amazon Services Deployment') {
         steps {
             withCredentials([
