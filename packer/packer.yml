@@ -1,6 +1,10 @@
 ---
 - hosts: all
 
+  pre_tasks:
+    - name: Update legacy Python2'
+      raw: sudo apt-get -y install python-simplejson
+
   tasks:
 
     # Install the Ruby and Gemspec pieces
@@ -47,10 +51,25 @@
       become: true
       command: env PATH=$PATH:/usr/bin pm2 startup upstart -u ubuntu --hp /home/ubuntu
 
+    - name: "Install GIT"
+      become: true
+      apt:
+        name: git
+      state: present
+      when:
+        - is_local == true
+
+    - name: "Clone"
+      become: true
+      command: git clone https://github.com/ehime/nodejs-app.git /home/ubuntu/nodejs-app/
+      when:
+        - is_local == true
+
+
     - name: PM2 startup configuration (pm2 start)
-      command: /usr/local/bin/pm2 start bin/www --name="nodejs-app"
+      command: /usr/bin/pm2 start bin/www --name="nodejs-app"
       args:
         chdir: /home/ubuntu/nodejs-app/
 
     - name: PM2 startup configuration (pm2 save)
-      command: /usr/local/bin/pm2 save
+      command: /usr/bin/pm2 save
