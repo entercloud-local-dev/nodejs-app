@@ -16,6 +16,7 @@
 
   tasks:
 
+    # Ruby stuff
     - name: Latest version of Ruby is installed
       become: true
       apt:
@@ -24,12 +25,16 @@
         - ruby2.3
         - ruby2.3-dev
 
-
-    - name: Install SafeYAML gem with proper $PATH
+    - name: Install Gems with proper $PATH
       become: true
       gem:
-        name: safe_yaml
+        name: "{{ item }}"
         user_install: no
+      with_items:
+        - safe_yaml   # ServerSpec Dep
+        - serverspec
+        - specinfra
+        - rake
 
 
     # Install the NodeJS pieces
