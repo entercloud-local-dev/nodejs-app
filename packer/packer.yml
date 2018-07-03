@@ -17,6 +17,7 @@
   tasks:
 
     - name: Latest version of Ruby is installed
+      become: true
       apt:
         name: "{{ item }}"
       with_items:
@@ -25,6 +26,7 @@
 
 
     - name: Install SafeYAML gem with proper $PATH
+      become: true
       gem:
         name: safe_yaml
         user_install: no
