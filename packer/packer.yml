@@ -7,20 +7,25 @@
 
   tasks:
 
+     - apt_repository:
+       repo: ppa:brightbox/ruby-ng
+
     # Install the Ruby and Gemspec pieces
     - name: Latest version of Ruby is installed
       become: true
-      apt: pkg={{ item }} state=present update_cache=yes
+      apt:
+        name: {{ item }}
+        state: present
+        update_cache: true
       with_items:
-        - "ruby2.0"
-        - "ruby2.0-dev"
+        - "ruby2.3"
+        - "ruby2.3-dev"
 
-    - name: Symlink exists for Ruby and Gemsspec
-      become: true
-      file: src=/usr/bin/{{ item }}2.0 dest=/usr/local/bin/{{ item }} state=link
-      with_items:
-        - "gem"
-        - "ruby"
+
+    - name: Install SafeYAML gem with proper $PATH
+      gem:
+        name: safe_yaml
+        user_install: no
 
     # Install the NodeJS pieces
     - name: Install the gpg key for nodejs LTS
@@ -51,19 +56,33 @@
       become: true
       command: env PATH=$PATH:/usr/bin pm2 startup upstart -u ubuntu --hp /home/ubuntu
 
+
+    # If this is a local build lets do it a bit diff for testing...
     - name: "Install GIT"
       become: true
       apt:
         name: git
       state: present
       when:
-        - is_local == true
+        - is_local == "true"
 
-    - name: "Clone"
+    - name: "Clone our source repository"
       become: true
-      command: git clone https://github.com/ehime/nodejs-app.git /home/ubuntu/nodejs-app/
+      become_user: ubuntu
+      command: git clone https://github.com/ehime/nodejs-app.git /home/ubuntu/nodejs-app
       when:
-        - is_local == true
+        - is_local == "true"
+
+    - name: "Move testing scripts"
+      become: true
+      become_user: ubuntu
+      command: mv /home/ubuntu/nodejs-app/packer/serverspec_tests /tmp/tests
+      when:
+        - is_local == "true"
+
+
+
+    # End our case...
 
 
     - name: PM2 startup configuration (pm2 start)

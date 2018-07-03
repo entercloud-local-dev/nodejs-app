@@ -2,7 +2,7 @@
   "variables": {
     "aws_access_key": "",
     "aws_secret_key": "",
-    "is_local": false
+    "is_local": "false"
   },
 
   "provisioners": [{
@@ -22,8 +22,9 @@
       "destination": "/home/ubuntu/nodejs-app/"
     }, {
       "type": "ansible-local",
-      "playbook_file": "packer/packer.yml"
-    },   {
+      "playbook_file": "packer/packer.yml",
+      "extra_arguments": [ "--extra-vars \"is_local={{user `is_local`}}\"" ]
+    }, {
       "type": "shell",
       "inline": [
         "mkdir /tmp/tests"
