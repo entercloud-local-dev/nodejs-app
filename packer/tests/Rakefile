@@ -1,32 +1,27 @@
 require 'rake'
 require 'rspec/core/rake_task'
 
-suites = Dir.glob('*').select{|entry| File.directory?(entry) }
+task :spec    => 'spec:all'
+task :default => :spec
 
-class ServerspecTask < RSpec::Core::RakeTask
-
-  attr_accessor :target
-
-  def spec_command
-
-    if target.nil?
-      puts "specify either env TARGET_HOST or target_host="
-      exit 1
-    end
-
-    cmd = super
-    "env TARGET_HOST=#{target} STANDALONE_SPEC=true #{cmd}  --format documentation --no-profile"
+namespace :spec do
+  targets = []
+  Dir.glob('./spec/*').each do |dir|
+    next unless File.directory?(dir)
+    target = File.basename(dir)
+    target = "_#{target}" if target == "default"
+    targets << target
   end
 
-end
+  task :all     => targets
+  task :default => :all
 
-namespace :serverspec do
-  suites.each do |suite|
-    desc "Run serverspec suite #{suite}"
-    ServerspecTask.new(suite.to_sym) do |t|
-      t.target = ENV['TARGET_HOST'] || ENV['target_host']
-      t.ruby_opts = "-I #{suite}/serverspec"
-      t.pattern = "#{suite}/serverspec/*_spec.rb"
+  targets.each do |target|
+    original_target = target == "_default" ? target[1..-1] : target
+    desc "Run serverspec tests to #{original_target}"
+    RSpec::Core::RakeTask.new(target.to_sym) do |t|
+      ENV['TARGET_HOST'] = original_target
+      t.pattern = "spec/#{original_target}/*_spec.rb"
     end
   end
 end
