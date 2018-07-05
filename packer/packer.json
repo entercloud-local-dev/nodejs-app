@@ -31,7 +31,7 @@
       ]
     }, {
         "type": "file",
-        "source": "packer/serverspec_tests",
+        "source": "packer/tests",
         "destination": "/tmp/tests"
     }, {
         "type": "shell",
