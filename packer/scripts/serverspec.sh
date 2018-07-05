@@ -5,4 +5,4 @@
 cd /tmp/tests ; rake=$(which rake |head -n1 |awk '{print$1}')
 echo -e "==> Running integration tests for AMI"
 
-$rake serverspec:localhost
+$rake spec:localhost

@@ -24,7 +24,6 @@
       with_items:
         - ruby2.3
         - ruby2.3-dev
-        - g++
 
     - name: Install Gems with proper $PATH
       become: true

@@ -55,7 +55,7 @@
     },
     "instance_type": "t2.micro",
     "ssh_username": "ubuntu",
-    "ami_name": "packer-{{user `ami_prefix`}}-{{user `ami_type`}}-1604-{{isotime \"2006-01-02-1504\"}}-{{user `git_hash`}}",
+    "ami_name": "packer-example-{{user `ami_prefix`}}-{{user `ami_type`}}-1604-{{isotime \"2006-01-02-1504\"}}-{{user `git_hash`}}",
     "launch_block_device_mappings": [{
       "device_name": "/dev/sda1",
       "volume_size": 8,
